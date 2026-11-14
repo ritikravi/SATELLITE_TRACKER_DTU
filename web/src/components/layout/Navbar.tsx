@@ -159,10 +159,6 @@ export function Navbar() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm ${
                 hardwareConnected
                   ? 'bg-emerald-500 border-emerald-600 text-white'
-                  : isMock
-                  ? 'bg-emerald-500 border-emerald-600 text-white'
-                  : connectionStatus === 'connecting'
-                  ? 'bg-slate-800 border-slate-700 text-slate-300'
                   : 'bg-red-600 border-red-700 text-white'
               }`}
             >
@@ -171,14 +167,9 @@ export function Navbar() {
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                   <span>● LIVE</span>
                 </>
-              ) : isMock ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  <span>● LIVE</span>
-                </>
               ) : connectionStatus === 'connecting' ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                   <span>Connecting...</span>
                 </>
               ) : (
