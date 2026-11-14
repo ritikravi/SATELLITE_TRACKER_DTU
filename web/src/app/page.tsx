@@ -19,7 +19,10 @@ export default function HomePage() {
   const { status, telemetry, connectionStatus } = useTracker();
   const [pass, setPass] = useState<SatellitePass | null>(null);
 
-  const isConnected = connectionStatus === 'connected';
+  const hardwareMode = (status as any)?.hardware_mode;
+  // Only show as connected when real ESP32 hardware is responding
+  const isConnected = status?.hardwareConnected === true || hardwareMode === 'HARDWARE_CONNECTED';
+  const isMockMode = !isConnected && connectionStatus === 'connected';
   const isTracking = (telemetry?.state || status?.state) === 'TRACKING';
   const isMoving = (telemetry?.state || status?.state) === 'SLEWING';
   const satName = status?.satelliteName || telemetry?.satelliteName || 'METEOR-M2 4';
@@ -188,20 +191,24 @@ export default function HomePage() {
                   <span>Current Status</span>
                 </div>
                 <div className="text-sm sm:text-base font-extrabold text-slate-900 leading-tight">
-                  {!isConnected
+                  {!isConnected && !isMockMode
                     ? 'Not Connected'
+                    : isMockMode
+                    ? 'Simulation Mode'
                     : isTracking
                     ? 'Tracking Active'
                     : isMoving
                     ? 'Moving to Position'
-                    : 'Tracker Standby'}
+                    : 'Hardware Ready'}
                 </div>
                 <div className="text-[11px] text-slate-500 font-medium truncate max-w-[200px]">
-                  {!isConnected
+                  {!isConnected && !isMockMode
                     ? 'Hardware tracker is offline'
+                    : isMockMode
+                    ? `Orbital data live · No hardware`
                     : isTracking
-                    ? `Connected to ${satName}`
-                    : `Standby (${satName})`}
+                    ? `Tracking ${satName}`
+                    : `ESP32 connected · ${satName}`}
                 </div>
               </div>
             </div>

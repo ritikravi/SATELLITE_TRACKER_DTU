@@ -36,12 +36,17 @@ const moreNavItems = [
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { connectionStatus, authToken, setTokenModalOpen } = useTracker();
+  const { connectionStatus, authToken, setTokenModalOpen, status } = useTracker();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isMoreActive = moreNavItems.some((item) => pathname === item.href);
+
+  // Real hardware connection: only true when ESP32 hardwareConnected flag is true
+  const hardwareMode = (status as any)?.hardware_mode;
+  const hardwareConnected = status?.hardwareConnected === true || hardwareMode === 'HARDWARE_CONNECTED';
+  const isMock = hardwareMode === 'MOCK' || hardwareMode === 'SIMULATION' || (!hardwareMode && connectionStatus === 'connected');
 
   // Close dropdown cleanly when clicking or tapping outside
   useEffect(() => {
@@ -152,18 +157,26 @@ export function Navbar() {
             {/* Live Connection Badge with clear text */}
             <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border shadow-2xs ${
-                connectionStatus === 'connected'
+                hardwareConnected
                   ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : isMock
+                  ? 'bg-amber-50 border-amber-200 text-amber-700'
                   : connectionStatus === 'connecting'
                   ? 'bg-amber-50 border-amber-200 text-amber-700'
                   : 'bg-rose-50 border-rose-200 text-rose-700'
               }`}
             >
-              {connectionStatus === 'connected' ? (
+              {hardwareConnected ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <Wifi className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Connected</span>
+                  <span>Hardware Live</span>
+                </>
+              ) : isMock ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <Wifi className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Simulation</span>
                 </>
               ) : connectionStatus === 'connecting' ? (
                 <>
