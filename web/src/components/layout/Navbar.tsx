@@ -154,40 +154,37 @@ export function Navbar() {
 
           {/* Right Status Indicators & Auth */}
           <div className="flex items-center gap-2.5">
-            {/* Live Connection Badge with clear text */}
+            {/* Live Connection Badge */}
             <div
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border shadow-2xs ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm ${
                 hardwareConnected
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  ? 'bg-emerald-500 border-emerald-600 text-white'
                   : isMock
-                  ? 'bg-amber-50 border-amber-200 text-amber-700'
+                  ? 'bg-emerald-500 border-emerald-600 text-white'
                   : connectionStatus === 'connecting'
-                  ? 'bg-amber-50 border-amber-200 text-amber-700'
-                  : 'bg-rose-50 border-rose-200 text-rose-700'
+                  ? 'bg-slate-800 border-slate-700 text-slate-300'
+                  : 'bg-red-600 border-red-700 text-white'
               }`}
             >
               {hardwareConnected ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Hardware Live</span>
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  <span>● LIVE</span>
                 </>
               ) : isMock ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <Wifi className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Simulation</span>
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  <span>● LIVE</span>
                 </>
               ) : connectionStatus === 'connecting' ? (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse" />
                   <span>Connecting...</span>
                 </>
               ) : (
                 <>
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <WifiOff className="w-3.5 h-3.5 text-rose-600" />
-                  <span>Not Connected</span>
+                  <span className="w-2 h-2 rounded-full bg-white" />
+                  <span>Server Down</span>
                 </>
               )}
             </div>
