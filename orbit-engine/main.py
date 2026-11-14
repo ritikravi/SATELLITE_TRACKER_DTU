@@ -447,5 +447,5 @@ def search_satellites(
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", "8200"))
-    logger.info("Starting NAVIC-TRACK Orbit Engine on http://127.0.0.1:%d", port)
-    uvicorn.run("main:app", host="127.0.0.1", port=port, reload=False, log_level="info")
+    logger.info("Starting NAVIC-TRACK Orbit Engine on http://0.0.0.0:%d", port)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False, log_level="info")

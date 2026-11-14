@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: navic-track-mock-server
+    runtime: node
+    rootDir: mock-server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: TRACKER_AUTH_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

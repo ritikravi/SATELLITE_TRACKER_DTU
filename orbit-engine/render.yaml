@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: navic-track-orbit-engine
+    runtime: python
+    rootDir: orbit-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PORT
+        value: 8200
