@@ -8,7 +8,9 @@
     "dev:mock": "npm --prefix mock-server start",
     "dev:web": "npm --prefix web run dev",
     "dev:jarvis": "openjarvis-venv\\Scripts\\python.exe openjarvis-service/server.py",
-    "build:web": "npm --prefix web run build"
+    "build:web": "npm --prefix web run build",
+    "build": "npm --prefix web run build",
+    "start": "npm --prefix web run start"
   },
   "engines": {
     "node": ">=20.0.0"

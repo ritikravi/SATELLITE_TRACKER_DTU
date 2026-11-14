@@ -1,27 +1,27 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Turbopack config only applies to dev mode (next dev)
-  // Production builds use webpack automatically
-  experimental: {
-    turbo: {
-      rules: {
-        "*.css": {
-          loaders: ["@tailwindcss/turbopack"],
-          as: "*.css",
-        },
-      },
-    },
-  },
-  // Required for Three.js and satellite.js
-  transpilePackages: [],
-  // Skip type checking during build for faster deploys
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  webpack: (config, { isServer, webpack }) => {
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(/^node:/, (resource: any) => {
+        resource.request = resource.request.replace(/^node:/, "");
+      })
+    );
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        module: false,
+        worker_threads: false,
+        fs: false,
+        path: false,
+      };
+    }
+    return config;
   },
 };
 
 export default nextConfig;
+

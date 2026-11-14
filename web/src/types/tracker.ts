@@ -6,11 +6,29 @@
 // Tracking operational states
 export type TrackingState =
   | 'IDLE'
+  | 'HOMING'
+  | 'READY'
+  | 'ACQUIRING'
   | 'TRACKING'
   | 'SLEWING'
-  | 'HOMING'
+  | 'PAUSED'
+  | 'STOPPING'
   | 'PARKED'
-  | 'ERROR';
+  | 'ERROR'
+  | 'EMERGENCY_STOP';
+
+// Hardware connectivity mode — always present in API responses
+// SIMULATION: Next.js serverless fallback; orbital math real, no hardware
+// MOCK:       Node.js mock server; orbital math real, motor physics simulated
+// HARDWARE_CONNECTED: ESP32 is responding and Arduino is acknowledged
+// HARDWARE_DISCONNECTED: ESP32 configured but not reachable
+// HARDWARE_ERROR: ESP32 reachable but Arduino not responding or motor fault
+export type HardwareMode =
+  | 'SIMULATION'
+  | 'MOCK'
+  | 'HARDWARE_CONNECTED'
+  | 'HARDWARE_DISCONNECTED'
+  | 'HARDWARE_ERROR';
 
 // Time synchronization status
 export type TimeSyncStatus =
@@ -47,6 +65,9 @@ export interface TrackerStatus {
   };
   isVisible?: boolean;
   hardwareConnected?: boolean;
+  // hardware_mode must be present in all API responses so the dashboard can
+  // clearly label whether it is showing simulation, mock, or real hardware data.
+  hardware_mode?: HardwareMode;
   imu: ImuOrientation;
   timeSync: TimeSyncStatus;
   lastTimeSync: string | null; // ISO 8601 string
