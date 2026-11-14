@@ -1,0 +1,37 @@
+services:
+  # Next.js Web Frontend Dashboard
+  - type: web
+    name: navic-track-web
+    runtime: node
+    rootDir: web
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+
+  # Mock Telemetry Server
+  - type: web
+    name: navic-track-mock-server
+    runtime: node
+    rootDir: mock-server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: TRACKER_AUTH_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+
+  # Python Orbit Engine
+  - type: web
+    name: navic-track-orbit-engine
+    runtime: python
+    rootDir: orbit-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PORT
+        value: 8200
