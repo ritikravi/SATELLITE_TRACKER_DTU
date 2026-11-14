@@ -1,0 +1,24 @@
+/*
+ * NAVIC-TRACK ESP32 Configuration Template
+ * 
+ * Copy this file to esp32_config.h and fill in your values.
+ * esp32_config.h is listed in .gitignore and must NEVER be committed.
+ */
+
+#ifndef ESP32_CONFIG_H
+#define ESP32_CONFIG_H
+
+// --- Wi-Fi ---
+#define WIFI_SSID   "YOUR_WIFI_NETWORK_NAME"
+#define WIFI_PASS   "YOUR_WIFI_PASSWORD"
+
+// --- Auth token (must match TRACKER_AUTH_TOKEN in mock-server/.env and web settings) ---
+// Change this from the default before deploying!
+#define AUTH_TOKEN  "change-me-before-use"
+
+// --- Hardware probe timing ---
+#define HW_PROBE_INTERVAL_MS    5000UL
+#define HW_DISCONNECT_TIMEOUT   15000UL
+#define ARDUINO_BUF_SIZE        128
+
+#endif // ESP32_CONFIG_H

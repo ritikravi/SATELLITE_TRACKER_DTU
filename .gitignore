@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment variables & secrets (CRITICAL: Never commit API keys or local tokens)
+.env
+.env.*
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.local
+
+# ESP32 credentials — NEVER commit
+firmware/esp32/esp32_config.h
+
+# Python virtual environment, caches & compiled files
+*venv/
+orbit-engine/venv/
+openjarvis-venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cloned third-party OpenJarvis repository
+openjarvis-repo/
+
+# Temporary test screenshots
+*.png
+!web/public/*.png
+!web/public/*.webp
+!web/public/textures/*
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+

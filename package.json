@@ -1,0 +1,16 @@
+{
+  "name": "navic-track-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node run-dev.js",
+    "dev:mock": "npm --prefix mock-server start",
+    "dev:web": "npm --prefix web run dev",
+    "dev:jarvis": "openjarvis-venv\\Scripts\\python.exe openjarvis-service/server.py",
+    "build:web": "npm --prefix web run build"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
