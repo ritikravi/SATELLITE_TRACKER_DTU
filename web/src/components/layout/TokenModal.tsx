@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTracker } from '@/context/TrackerContext';
-import { Key, Lock, CheckCircle, X } from '@/components/ui/icons';
+import { Key, Lock, CheckCircle, X, Radio } from '@/components/ui/icons';
+import { getStoredTrackerUrl, setStoredTrackerUrl, clearStoredTrackerUrl } from '@/lib/api';
 
 export function TokenModal() {
-  const { authToken, setAuthToken, clearAuthToken, isTokenModalOpen, setTokenModalOpen } = useTracker();
+  const { authToken, setAuthToken, clearAuthToken, isTokenModalOpen, setTokenModalOpen, refreshStatus } = useTracker();
   const [tokenInput, setTokenInput] = useState('');
+  const [urlInput, setUrlInput] = useState('');
   const [showSavedFeedback, setShowSavedFeedback] = useState(false);
 
   useEffect(() => {
@@ -14,6 +16,12 @@ export function TokenModal() {
       setTokenInput(authToken);
     } else {
       setTokenInput('');
+    }
+    const savedUrl = getStoredTrackerUrl();
+    if (savedUrl) {
+      setUrlInput(savedUrl);
+    } else {
+      setUrlInput('');
     }
   }, [authToken, isTokenModalOpen]);
 
@@ -23,17 +31,25 @@ export function TokenModal() {
     e.preventDefault();
     if (tokenInput.trim()) {
       setAuthToken(tokenInput.trim());
-      setShowSavedFeedback(true);
-      setTimeout(() => {
-        setShowSavedFeedback(false);
-        setTokenModalOpen(false);
-      }, 700);
     }
+    if (urlInput.trim()) {
+      setStoredTrackerUrl(urlInput.trim());
+    } else {
+      clearStoredTrackerUrl();
+    }
+    refreshStatus();
+    setShowSavedFeedback(true);
+    setTimeout(() => {
+      setShowSavedFeedback(false);
+      setTokenModalOpen(false);
+    }, 700);
   };
 
   const handleClear = () => {
     clearAuthToken();
+    clearStoredTrackerUrl();
     setTokenInput('');
+    setUrlInput('');
   };
 
   return (
@@ -88,6 +104,23 @@ export function TokenModal() {
             </div>
             <p className="text-[11px] text-slate-500 mt-1.5">
               Saved securely inside your web browser. You only need to enter it once.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center justify-between">
+              <span>ESP32 Hardware IP / URL</span>
+              <span className="text-[10px] text-slate-400 font-normal">Optional (Leave blank for Simulation)</span>
+            </label>
+            <input
+              type="text"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              placeholder="e.g. http://192.168.4.1:8080 or http://10.254.214.X:8080"
+              className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-colors shadow-2xs"
+            />
+            <p className="text-[11px] text-slate-500 mt-1.5">
+              For ESP32 Access Point mode, enter: <code className="text-sky-700 font-bold">http://192.168.4.1:8080</code>
             </p>
           </div>
 

@@ -16,8 +16,27 @@ import {
 } from '@shared/types/tracker';
 import { setCachedSatelliteName } from './decoder';
 
-function getBaseUrl(): string {
+export function getStoredTrackerUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('navic_tracker_url');
+}
+
+export function setStoredTrackerUrl(url: string): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('navic_tracker_url', url.trim());
+}
+
+export function clearStoredTrackerUrl(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('navic_tracker_url');
+}
+
+export function getBaseUrl(): string {
   if (typeof window !== 'undefined') {
+    const customUrl = getStoredTrackerUrl();
+    if (customUrl) {
+      return customUrl.replace(/\/+$/, '');
+    }
     const envUrl = process.env.NEXT_PUBLIC_TRACKER_URL?.trim();
     if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('navic-tracker-live.trycloudflare.com')) {
       return envUrl.replace(/\/+$/, '');
@@ -31,8 +50,6 @@ function getBaseUrl(): string {
   }
   return 'http://localhost:8080';
 }
-
-const BASE_URL = getBaseUrl();
 
 export function getStoredAuthToken(): string | null {
   if (typeof window === 'undefined') return null;
@@ -50,7 +67,7 @@ export function clearStoredAuthToken(): void {
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${getBaseUrl()}${endpoint}`;
   const token = getStoredAuthToken();
 
   const headers: Record<string, string> = {
